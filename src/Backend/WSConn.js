@@ -1,16 +1,26 @@
-import React, {createContext} from "react";
-import json from "querystring";
+import React, {createContext, useCallback} from "react";
+import {useDispatch, useStore} from "react-redux";
+import {
+    AUTHENTICATE,
+    AuthenticateMethod, AUTHORIZE, AuthorizeMethod, IS_EMAIL_REGISTERED, IS_USER_REGISTERED, IsEmailRegisteredMethod,
+    ISREGISTERED,
+    IsRegisteredMethod, IsUserRegisteredMethod,
+    REGISTER,
+    RegisterMethod
+} from "./Models/methods";
 
 const WebSocketContext = createContext({})
 export {WebSocketContext}
 
-export default ({children}) => {
+export default function WSComponent({children}) {
 
     let ws
     let socket
+    const dispatch = useDispatch()
+    let store = useStore()
+
 
     let timeout = 250; // Initial timeout duration as a class variable
-
 
     const sendMessage = (data) => {
         console.log(data)
@@ -22,6 +32,33 @@ export default ({children}) => {
             console.log(error) // catch error
         }
     }
+
+    function processResponse(data) {
+        console.log(data)
+        switch (data.Method) {
+            case IS_USER_REGISTERED:
+                dispatch(IsUserRegisteredMethod(data))
+                break
+            case IS_EMAIL_REGISTERED:
+                dispatch(IsEmailRegisteredMethod(data))
+                break
+            case ISREGISTERED:
+                dispatch(IsRegisteredMethod(data))
+                break
+            case REGISTER:
+                dispatch(RegisterMethod(data))
+                break
+            case AUTHENTICATE:
+                dispatch(AuthenticateMethod(data))
+                break
+            case AUTHORIZE:
+                dispatch(AuthorizeMethod(data))
+                break
+            default:
+                break
+        }
+    }
+
 
     /**
      * @function connect
@@ -41,7 +78,19 @@ export default ({children}) => {
 
 
         ws.onmessage = (message) => {
-            console.log(message.data);
+            let data = message.data.split('}\n{')
+            for (let i = 1; i < data.length; i++) {
+                if (i === 1) {
+                    data[0] += '}'
+                }
+                if (i === data.length - 1) {
+                    data[i] = '{' + data[i]
+                } else {
+                    data[i] = '{' + data[i] + '}'
+                }
+            }
+            data.forEach(e => processResponse(JSON.parse(e)))
+
         };
 
         // websocket onclose event listener
@@ -75,7 +124,9 @@ export default ({children}) => {
         socket = {
             ws: ws,
             sendMessage,
-            check
+            check,
+            dispatch,
+            processResponse
         }
     }
 

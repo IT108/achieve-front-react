@@ -1,17 +1,26 @@
 import * as actionTypes from './actions';
 import config from './../config';
+import {
+    AUTHENTICATE,
+    AuthenticateMethod,
+    AUTHORIZE, AuthorizeMethod, IS_EMAIL_REGISTERED, IS_USER_REGISTERED,
+    ISREGISTERED,
+    REGISTER,
+    RegisterMethod
+} from "../Backend/Models/methods";
 
 const initialState = {
     isOpen: [], //for active default menu
     isTrigger: [], //for active default menu, set blank for horizontal
     ...config,
     isFullScreen: false, // static can't change
+    usernameTaken: false,
+    emailTaken: false
 };
 
 const reducer = (state = initialState, action) => {
     let trigger = [];
     let open = [];
-
     switch (action.type) {
         case actionTypes.COLLAPSE_MENU:
             return {
@@ -83,6 +92,29 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 layout: action.layout
             };
+        case ISREGISTERED:
+            return {
+                ...state,
+                usernameTaken: action.payload.IsUsernameRegistered,
+                emailTaken: action.payload.IsEmailRegistered
+            };
+        case IS_EMAIL_REGISTERED:
+            return {
+                ...state,
+                emailTaken: action.payload.IsEmailRegistered
+            };
+        case IS_USER_REGISTERED:
+            console.log(action.payload.IsUsernameRegistered)
+            return {
+                ...state,
+                usernameTaken: action.payload.IsUsernameRegistered
+            };
+        case REGISTER:
+            return state;
+        case AUTHENTICATE:
+            return state;
+        case AUTHORIZE:
+            return state;
         default:
             return state;
     }

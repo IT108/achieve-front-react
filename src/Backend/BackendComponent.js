@@ -1,9 +1,12 @@
-import React, {createContext, useContext} from "react";
-import AuthContextProvider, {AuthContext} from "./Auth";
+import React from "react";
+import AuthContextProvider from "./Auth";
 import WebSocketContextProvider from "./WSConn";
+import WSComponent from "./WSConn";
 
 
 export default function BackendComponent({children}) {
+
+
 
     return (
         <WebSocketContextProvider>

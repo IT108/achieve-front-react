@@ -1,6 +1,6 @@
-export default class AuthenticateResponse extends Request {
+import RequestModel from "../RequestModel";
+
+export default class IsRegisteredResponse extends RequestModel {
     responseCode
     error
-    IsEmailRegistered
-    IsUsernameRegistered
 }
