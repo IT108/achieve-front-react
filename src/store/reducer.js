@@ -2,11 +2,9 @@ import * as actionTypes from './actions';
 import config from './../config';
 import {
     AUTHENTICATE,
-    AuthenticateMethod,
-    AUTHORIZE, AuthorizeMethod, IS_EMAIL_REGISTERED, IS_USER_REGISTERED,
+    AUTHORIZE, IS_EMAIL_REGISTERED, IS_USER_REGISTERED,
     ISREGISTERED,
     REGISTER,
-    RegisterMethod
 } from "../Backend/Models/methods";
 
 const initialState = {
@@ -15,7 +13,8 @@ const initialState = {
     ...config,
     isFullScreen: false, // static can't change
     usernameTaken: false,
-    emailTaken: false
+    emailTaken: false,
+    registerError: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -95,22 +94,25 @@ const reducer = (state = initialState, action) => {
         case ISREGISTERED:
             return {
                 ...state,
-                usernameTaken: action.payload.IsUsernameRegistered,
-                emailTaken: action.payload.IsEmailRegistered
+                usernameTaken: action.payload.is_username_registered,
+                emailTaken: action.payload.is_email_registered
             };
         case IS_EMAIL_REGISTERED:
             return {
                 ...state,
-                emailTaken: action.payload.IsEmailRegistered
+                emailTaken: action.payload.is_email_registered
             };
         case IS_USER_REGISTERED:
-            console.log(action.payload.IsUsernameRegistered)
             return {
                 ...state,
-                usernameTaken: action.payload.IsUsernameRegistered
+                usernameTaken: action.payload.is_username_registered
             };
         case REGISTER:
-            return state;
+            console.log(action.payload)
+            return {
+                ...state,
+                registerError: action.payload.error
+            }
         case AUTHENTICATE:
             return state;
         case AUTHORIZE:

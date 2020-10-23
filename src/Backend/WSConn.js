@@ -8,6 +8,7 @@ import {
     REGISTER,
     RegisterMethod
 } from "./Models/methods";
+import RequestModel from "./Models/RequestModel";
 
 const WebSocketContext = createContext({})
 export {WebSocketContext}
@@ -34,8 +35,8 @@ export default function WSComponent({children}) {
     }
 
     function processResponse(data) {
-        console.log(data)
-        switch (data.Method) {
+        console.log(data.request)
+        switch (data.request.method) {
             case IS_USER_REGISTERED:
                 dispatch(IsUserRegisteredMethod(data))
                 break

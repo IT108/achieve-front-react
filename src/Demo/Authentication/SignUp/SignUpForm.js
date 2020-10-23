@@ -58,6 +58,7 @@ const SignUpForm = () => {
     const auth = useContext(AuthContext);
     const usernameTaken = useSelector(state => state.usernameTaken);
     const emailTaken = useSelector(state => state.emailTaken);
+    const registerError = useSelector(state => state.registerError);
 
     Yup.addMethod(Yup.string, 'checkUsername', function () {
         return this.test({
@@ -109,20 +110,20 @@ const SignUpForm = () => {
     return (
         <div className="card">
             <Formik
-                    initialValues={{
-                        email: '',
-                        username: '',
-                        password: '',
-                        repeatPassword: '',
-                        acceptTerms: false,
-                    }}
-                    validationSchema={SignUpSchema}
-                    onSubmit={values => {
-                        console.log(values)
-                        setTimeout(() => {
-                            auth.register(values.username, values.email, values.password)
-                        }, 500);
-                    }}
+                initialValues={{
+                    email: '',
+                    username: '',
+                    password: '',
+                    repeatPassword: '',
+                    acceptTerms: false,
+                }}
+                validationSchema={SignUpSchema}
+                onSubmit={values => {
+                    console.log(values)
+                    setTimeout(() => {
+                        auth.register(values.username, values.email, values.password)
+                    }, 500);
+                }}
             >{({errors, touched, isSubmitting, validateField}) => (
                 <Form>
                     <div className="card-body text-center">
@@ -159,6 +160,13 @@ const SignUpForm = () => {
                         <div className="text-left mb-4 error-block">
                             <ErrorMessage name="acceptTerms"/>
                         </div>
+
+                        {registerError !== '' ? (
+                            <div className="text-center mb-4 error-block">
+                                {registerError}
+                            </div>
+                        ) : null
+                        }
 
                         <input type="submit"
                                className="btn btn-primary shadow-2 mb-4"

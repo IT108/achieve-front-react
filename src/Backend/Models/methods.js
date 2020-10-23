@@ -30,7 +30,7 @@ export const REGISTER = 'register'
 export function RegisterMethod(data) {
     return {
         type: REGISTER,
-        data: data
+        payload: data
     }
 }
 export const AUTHENTICATE = 'authenticate'
@@ -38,7 +38,7 @@ export const AUTHENTICATE = 'authenticate'
 export function AuthenticateMethod(data) {
     return {
         type: AUTHENTICATE,
-        data: data
+        payload: data
     }
 }
 
@@ -47,6 +47,15 @@ export const AUTHORIZE = 'authorize'
 export function AuthorizeMethod(data) {
     return {
         type: AUTHORIZE,
-        data: data
+        payload: data
+    }
+}
+
+export const AUTH_REFRESH_KEY = 'auth_refresh'
+
+export function AuthRefreshMethod(data) {
+    return {
+        type: AUTH_REFRESH_KEY,
+        payload: data
     }
 }

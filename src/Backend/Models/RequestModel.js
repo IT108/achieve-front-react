@@ -3,6 +3,6 @@ export default class RequestModel {
     method
     sender
     user
-    gateId
+    gate_id
     data
 }
